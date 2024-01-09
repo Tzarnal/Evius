@@ -1,0 +1,33 @@
+#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.bak
+*.cache
+*.ilk
+*.log
+*.dtbcache.v2
+[Bb]in
+[Dd]ebug*/
+*.sbr
+obj/
+[Rr]elease*/
+_ReSharper*/
+App_Data/
+
+*.png
+*.kra*
+
+.vs
+
+Templater/session.txt
+
+2020 All Days, Every Day/out.txt
+*input*.txt
