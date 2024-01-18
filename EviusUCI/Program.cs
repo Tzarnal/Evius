@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using EviusChess;
+using Serilog;
 using System.Diagnostics;
 
 namespace EviusUCI
