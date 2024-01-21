@@ -8,11 +8,11 @@ internal class EviusUCIShell
     {
         _running = true;
 
+        Console.WriteLine("Evius Chess");
+
         while (_running)
         {
             var consoleLine = Console.ReadLine();
-
-            Log.Information("Received {line}", consoleLine);
 
             if (string.IsNullOrWhiteSpace(consoleLine))
             {
@@ -65,7 +65,6 @@ internal class EviusUCIShell
     private void CommandGo(string input)
     {
         Console.WriteLine("bestmove a2a3");
-        Log.Warning("Sent {line}", "bestmove a2a3");
     }
 
     private void CommandUci()
@@ -73,19 +72,16 @@ internal class EviusUCIShell
         Console.WriteLine("id name Evius");
         Console.WriteLine("id author Stefan van Oudenaarden");
         Console.WriteLine("uciok");
-        Log.Warning("Sent {line}", "uciok");
     }
 
     private void CommandIsReady()
     {
         Console.WriteLine("readyok");
-        Log.Warning("Sent {line}", "readyok");
     }
 
     private void CommandQuit()
     {
         _running = false;
-        Log.Warning("Quitting");
     }
 
     private void CommandDefault()

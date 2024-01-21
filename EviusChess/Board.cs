@@ -22,7 +22,7 @@
 
 public class Board
 {
-    private IPiece[] _squares;
+    private Piece[] _squares;
     public int BoardWidth { get; }
     public int BoardHeight { get; }
 
@@ -32,7 +32,7 @@ public class Board
         BoardHeight = height;
 
         var totalSquares = width * height;
-        _squares = new IPiece[totalSquares];
+        _squares = new Piece[totalSquares];
     }
 
     public int Mailbox(int x, int y)
@@ -52,25 +52,25 @@ public class Board
         return Mailbox(xNumber, y);
     }
 
-    public IPiece this[int i]
+    public Piece this[int i]
     {
         get => _squares[i];
         set => _squares[i] = value;
     }
 
-    public IPiece this[int x, int y]
+    public Piece this[int x, int y]
     {
         get => _squares[Mailbox(x, y)];
         set => _squares[Mailbox(x, y)] = value;
     }
 
-    public IPiece this[string x, int y]
+    public Piece this[string x, int y]
     {
         get => _squares[Mailbox(x, y)];
         set => _squares[Mailbox(x, y)] = value;
     }
 
-    public IPiece this[char x, int y]
+    public Piece this[char x, int y]
     {
         get => _squares[Mailbox(x, y)];
         set => _squares[Mailbox(x, y)] = value;
