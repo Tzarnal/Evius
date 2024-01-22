@@ -2,6 +2,11 @@
 
 public static class BoardFactory
 {
+    public static Board EmptyBoard()
+    {
+        return new Board();
+    }
+
     public static Board ClassicStartingBoard()
     {
         var board = new Board();
@@ -41,6 +46,13 @@ public static class BoardFactory
         board["F", 7] = new Pawn { IsBlack = true };
         board["G", 7] = new Pawn { IsBlack = true };
         board["H", 7] = new Pawn { IsBlack = true };
+
+        return board;
+    }
+
+    public static Board FromFen(string Fen)
+    {
+        var board = new Board();
 
         return board;
     }
