@@ -1,4 +1,6 @@
-﻿namespace EviusChess;
+﻿using System.Text.RegularExpressions;
+
+namespace EviusChess;
 
 public static class BoardFactory
 {
@@ -52,8 +54,101 @@ public static class BoardFactory
 
     public static Board FromFen(string Fen)
     {
+        var FenMatchRegex = "\\s*^(((?:[rnbqkpRNBQKP1-8]+\\/){7})[rnbqkpRNBQKP1-8]+)\\s([b|w])\\s(-|[K|Q|k|q]{1,4})\\s(-|[a-h][1-8])\\s(\\d+\\s\\d+)$";
+        var FenMatch = Regex.Match(Fen, FenMatchRegex);
+
+        if (!FenMatch.Success)
+        {
+            throw new Exception("Not a fen string");
+        }
+
         var board = new Board();
 
+        FenPiecePlacement(board, FenMatch.Groups[1].Value);
+
         return board;
+    }
+
+    private static void FenPiecePlacement(Board Board, string PiecePlacementString)
+    {
+        int x = 1;
+        int y = 8;
+
+        foreach (var c in PiecePlacementString)
+        {
+            switch (c)
+            {
+                case 'r':
+                    Board[x, y] = new Rook { IsBlack = true };
+                    break;
+
+                case 'R':
+                    Board[x, y] = new Rook { IsWhite = true };
+                    break;
+
+                case 'n':
+                    Board[x, y] = new Knight { IsBlack = true };
+                    break;
+
+                case 'N':
+                    Board[x, y] = new Knight { IsWhite = true };
+                    break;
+
+                case 'b':
+                    Board[x, y] = new Bishop { IsBlack = true };
+                    break;
+
+                case 'B':
+                    Board[x, y] = new Bishop { IsWhite = true };
+                    break;
+
+                case 'q':
+                    Board[x, y] = new Queen { IsBlack = true };
+                    break;
+
+                case 'Q':
+                    Board[x, y] = new Queen { IsWhite = true };
+                    break;
+
+                case 'k':
+                    Board[x, y] = new King { IsBlack = true };
+                    break;
+
+                case 'K':
+                    Board[x, y] = new King { IsWhite = true };
+                    break;
+
+                case 'p':
+                    Board[x, y] = new Pawn { IsBlack = true };
+                    break;
+
+                case 'P':
+                    Board[x, y] = new Pawn { IsWhite = true };
+                    break;
+
+                //Advance "down" one rank, start from "before" A so normal increment puts it on A
+                case '/':
+                    x = 0;
+                    y--;
+                    break;
+
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                    var skipNumber = int.Parse(c.ToString());
+                    x += skipNumber - 1;
+                    break;
+
+                default:
+                    throw new Exception("Uknown character in FEN string.");
+            }
+
+            x++;
+        }
     }
 }
