@@ -78,6 +78,7 @@ public static class BoardFactory
         {
             switch (c)
             {
+                //Pieces, lowercase for black, uppercase for white
                 case 'r':
                     Board[x, y] = new Rook { IsBlack = true };
                     break;
@@ -132,6 +133,7 @@ public static class BoardFactory
                     y--;
                     break;
 
+                //Skip x places
                 case '1':
                 case '2':
                 case '3':
