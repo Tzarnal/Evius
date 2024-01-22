@@ -29,4 +29,11 @@ public static class Utils
     {
         return _alphabet[input - 1];
     }
+
+    public static (int x, int y) SplitNotation(string value)
+    {
+        var x = ToInt(value[0]);
+        var y = int.Parse(value[1..]);
+        return new(x, y);
+    }
 }
