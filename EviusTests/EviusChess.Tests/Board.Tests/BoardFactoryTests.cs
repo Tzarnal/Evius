@@ -12,38 +12,6 @@ public class BoardFactoryTests
     [InlineData("F1", typeof(Bishop), true)]
     [InlineData("G1", typeof(Knight), true)]
     [InlineData("H1", typeof(Rook), true)]
-    [InlineData("H2", typeof(Pawn), true)]
-    //Black pieces
-    [InlineData("A8", typeof(Rook), false)]
-    [InlineData("B8", typeof(Knight), false)]
-    [InlineData("C8", typeof(Bishop), false)]
-    [InlineData("D8", typeof(Queen), false)]
-    [InlineData("E8", typeof(King), false)]
-    [InlineData("F8", typeof(Bishop), false)]
-    [InlineData("G8", typeof(Knight), false)]
-    [InlineData("H8", typeof(Rook), false)]
-    [InlineData("H7", typeof(Pawn), false)]
-    public void StartingPositionFromFen(string position, Type? piece, bool isWhite)
-    {
-        const string fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-        var board = BoardFactory.FromFen(fenString);
-        var p = board[position];
-
-        Assert.Equal(p.GetType(), piece);
-        Assert.Equal(p.IsWhite, isWhite);
-    }
-
-    [Theory]
-    //White pieces
-    [InlineData("A1", typeof(Rook), true)]
-    [InlineData("B1", typeof(Knight), true)]
-    [InlineData("C1", typeof(Bishop), true)]
-    [InlineData("D1", typeof(Queen), true)]
-    [InlineData("E1", typeof(King), true)]
-    [InlineData("F1", typeof(Bishop), true)]
-    [InlineData("G1", typeof(Knight), true)]
-    [InlineData("H1", typeof(Rook), true)]
     [InlineData("A2", typeof(Pawn), true)]
     [InlineData("B2", typeof(Pawn), true)]
     [InlineData("C2", typeof(Pawn), true)]
@@ -76,5 +44,30 @@ public class BoardFactoryTests
 
         Assert.Equal(p.GetType(), piece);
         Assert.Equal(p.IsWhite, isWhite);
+    }
+
+    [Fact]
+    public void StartingPositionFromFen()
+    {
+        const string fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+        var board = BoardFactory.FromFen(fenString);
+        var expectedBoard = BoardFactory.ClassicStartingBoard();
+
+        for (var i = 0; i < 64; i++)
+        {
+            var p = board[i];
+            var e = expectedBoard[i];
+
+            if (p == null || e == null)
+            {
+                Assert.Equal(e, p);
+            }
+            else
+            {
+                Assert.Equal(e.IsWhite, p.IsWhite);
+                Assert.Equal(e.Name, p.Name);
+            }
+        }
     }
 }
