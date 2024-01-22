@@ -2,7 +2,9 @@
 
 public class Pawn : Piece
 {
-    public new static string Name => "Pawn";
-
-    public new static string Letter => "";
+    public Pawn()
+    {
+        Name = "Pawn";
+        Letter = "P";
+    }
 }

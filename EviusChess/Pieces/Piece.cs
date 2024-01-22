@@ -2,8 +2,8 @@
 
 public abstract class Piece
 {
-    public string Name { get; }
-    public string Letter { get; }
+    public string Name { get; set; }
+    public string Letter { get; set; }
 
     public bool IsWhite { get; set; }
 

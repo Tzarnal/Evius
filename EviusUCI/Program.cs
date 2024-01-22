@@ -1,7 +1,8 @@
-﻿//Debugger.Launch();
+﻿using EviusUCI.Shell;
+
+//Debugger.Launch();
 
 //Remove old log
-using EviusUCI.Shell;
 
 File.Delete("log.txt");
 

@@ -2,7 +2,10 @@
 
 public class Queen : Piece
 {
-    public new static string Name => "Queen";
+    public Queen()
+    {
+        Name = "Queen";
+        Letter = "Q";
+    }
 
-    public new static string Letter => "Q";
 }

@@ -29,7 +29,6 @@ A FEN record contains six fields, each separated by a space. The fields are as f
     Fullmove number: The number of the full moves. It starts at 1 and is incremented after Black's move.
 
 
-
 The following example is from the FEN specification:[10]
 
     Here is the FEN for the starting position:

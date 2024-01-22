@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EviusChess\EviusChess.csproj" />
+    <ProjectReference Include="..\EviusExporters\EviusExporters.csproj" />
   </ItemGroup>
 
 </Project>
