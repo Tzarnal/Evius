@@ -26,24 +26,26 @@ public static class ImageExporter
         {
             for (int y = 1; y <= board.BoardHeight; y++)
             {
-                if (board[x, y] != null)
+                if (board[x, y] == null)
                 {
-                    var piece = board[x, y];
-
-                    var pieceImage = GetPieceImage(piece, pieceSize);
-
-                    image.Mutate(i => i.DrawImage(pieceImage, new Point(
-                        totalWidth - (x * squareSize) + pieceOffset,
-                        totalHeight - (y * squareSize) + pieceOffset),
-                        1f));
+                    continue;
                 }
+
+                var piece = board[x, y];
+
+                var pieceImage = GetPieceImage(piece, pieceSize);
+
+                image.Mutate(i => i.DrawImage(pieceImage, new Point(
+                    totalWidth - (x * squareSize) + pieceOffset,
+                    totalHeight - (y * squareSize) + pieceOffset),
+                    1f));
             }
         }
 
         return image;
     }
 
-    public static Image GetPieceImage(Piece piece, int pieceSize)
+    private static Image GetPieceImage(Piece piece, int pieceSize)
     {
         var color = piece.IsWhite ? "White" : "Black";
         var name = piece.Name;
@@ -55,7 +57,7 @@ public static class ImageExporter
         return image;
     }
 
-    public static Image BaseImage(Board board, int squareSize)
+    private static Image BaseImage(Board board, int squareSize)
     {
         var colorA = Color.ParseHex("E9EDCC");
         var colorB = Color.ParseHex("779954");
