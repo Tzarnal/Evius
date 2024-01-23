@@ -25,6 +25,11 @@ public class Board
     private Piece[] _squares;
     public int BoardWidth { get; }
     public int BoardHeight { get; }
+    public int? EnPassantSquare { get; set; }
+    public int HalfmoveClock { get; set; }
+    public int FullMoveCount { get; set; }
+    public bool WhiteToMove { get; set; }
+    public bool BlackToMove { get => !WhiteToMove; set => WhiteToMove = !value; }
 
     public Board(int width = 8, int height = 8)
     {
@@ -56,6 +61,66 @@ public class Board
     {
         var (x, y) = Utils.SplitNotation(input);
         return Mailbox(x, y);
+    }
+
+    public IEnumerable<Piece> GetAllPieces()
+    {
+        for (int i = 0; i < _squares.Length; i++)
+        {
+            if (_squares[i] != null)
+            {
+                yield return _squares[i];
+            }
+        }
+    }
+
+    public IEnumerable<Piece> GetAllWhitePieces()
+    {
+        foreach (var piece in GetAllPieces())
+        {
+            if (piece.IsWhite) yield return piece;
+        }
+    }
+
+    public IEnumerable<Piece> GetAllBlackPieces()
+    {
+        foreach (var piece in GetAllPieces())
+        {
+            if (piece.IsBlack) yield return piece;
+        }
+    }
+
+    public IEnumerable<T> GetPieces<T>()
+    {
+        foreach (var piece in GetAllPieces())
+        {
+            if (piece is T)
+            {
+                yield return (T)Convert.ChangeType(piece, typeof(T));
+            }
+        }
+    }
+
+    public IEnumerable<T> GetWhitePieces<T>()
+    {
+        foreach (var piece in GetAllWhitePieces())
+        {
+            if (piece is T)
+            {
+                yield return (T)Convert.ChangeType(piece, typeof(T));
+            }
+        }
+    }
+
+    public IEnumerable<T> GetBlackPieces<T>()
+    {
+        foreach (var piece in GetAllBlackPieces())
+        {
+            if (piece is T)
+            {
+                yield return (T)Convert.ChangeType(piece, typeof(T));
+            }
+        }
     }
 
     public Piece this[int i]

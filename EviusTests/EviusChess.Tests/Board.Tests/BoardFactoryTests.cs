@@ -69,5 +69,10 @@ public class BoardFactoryTests
                 Assert.Equal(e.Name, p.Name);
             }
         }
+
+        Assert.True(board.WhiteToMove);
+        Assert.Null(board.EnPassantSquare);
+        Assert.Equal(0, board.HalfmoveClock);
+        Assert.Equal(1, board.FullMoveCount);
     }
 }

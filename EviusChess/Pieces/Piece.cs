@@ -12,4 +12,11 @@ public abstract class Piece
         get => !IsWhite;
         set => IsWhite = !value;
     }
+
+    public bool HasMoved { get; set; }
+
+    public void HandleMove(int start, int end)
+    {
+        HasMoved = true;
+    }
 }

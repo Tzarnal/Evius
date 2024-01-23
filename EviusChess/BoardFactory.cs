@@ -49,12 +49,14 @@ public static class BoardFactory
         board["G", 7] = new Pawn { IsBlack = true };
         board["H", 7] = new Pawn { IsBlack = true };
 
+        board.FullMoveCount = 1;
+
         return board;
     }
 
     public static Board FromFen(string Fen)
     {
-        var FenMatchRegex = "\\s*^(((?:[rnbqkpRNBQKP1-8]+\\/){7})[rnbqkpRNBQKP1-8]+)\\s([b|w])\\s(-|[K|Q|k|q]{1,4})\\s(-|[a-h][1-8])\\s(\\d+\\s\\d+)$";
+        const string FenMatchRegex = "\\s*^(((?:[rnbqkpRNBQKP1-8]+\\/){7})[rnbqkpRNBQKP1-8]+)\\s([b|w])\\s(-|[K|Q|k|q]{1,4})\\s(-|[a-h][1-8])\\s(\\d+\\s\\d+)$";
         var FenMatch = Regex.Match(Fen, FenMatchRegex);
 
         if (!FenMatch.Success)
@@ -64,7 +66,51 @@ public static class BoardFactory
 
         var board = new Board();
 
+        //Piece Placement
         FenPiecePlacement(board, FenMatch.Groups[1].Value);
+
+        //Active Color
+        var activeColor = FenMatch.Groups[3].Value;
+        if (activeColor == "w")
+        {
+            board.WhiteToMove = true;
+        }
+        else if (activeColor == "b")
+        {
+            board.BlackToMove = true;
+        }
+        else
+        {
+            throw new Exception("Invalid argument for active colour");
+        }
+
+        //Castling
+        var castlingRights = FenMatch.Groups[4].Value;
+        FenCastleRights(board, castlingRights);
+
+        //En Passant
+        var enpassantSquare = FenMatch.Groups[5].Value;
+        if (enpassantSquare != "-")
+        {
+            var (x, y) = Utils.SplitNotation(enpassantSquare);
+            board.EnPassantSquare = board.Mailbox(x, y);
+        }
+
+        //Halfmove clock
+        var clocks = FenMatch.Groups[6].Value.Split(" ");
+
+        var halfMove = clocks[0];
+        if (halfMove != "-")
+        {
+            board.HalfmoveClock = int.Parse(halfMove);
+        }
+
+        //Fullmove number
+        var fullMove = clocks[1];
+        if (fullMove != "-")
+        {
+            board.FullMoveCount = int.Parse(fullMove);
+        }
 
         return board;
     }
@@ -151,6 +197,87 @@ public static class BoardFactory
             }
 
             x++;
+        }
+    }
+
+    private static void FenCastleRights(Board board, string rights)
+    {
+        //No pieces have castling rights
+        if (rights != "-")
+        {
+            foreach (var rook in board.GetPieces<Rook>())
+            {
+                rook.HasCastleRights = false;
+            }
+
+            foreach (var king in board.GetPieces<King>())
+            {
+                king.HasCastleRights = false;
+            }
+        }
+
+        if (rights.Contains('Q'))
+        {
+            ((Rook)board["A1"]).HasCastleRights = true;
+            ((King)board["E1"]).HasCastleRights = true;
+        }
+        else if (board["A1"] is not null and Rook)
+        {
+            ((Rook)board["A1"]).HasCastleRights = false;
+        }
+
+        if (rights.Contains('K'))
+        {
+            ((Rook)board["H1"]).HasCastleRights = true;
+            ((King)board["E1"]).HasCastleRights = true;
+        }
+        else if (board["H1"] is not null and Rook)
+        {
+            ((Rook)board["A1"]).HasCastleRights = false;
+        }
+
+        //No white castling rights remain
+        if (!rights.Contains('Q') && !rights.Contains('Q'))
+        {
+            var king = board.GetWhitePieces<King>().First();
+            king.HasCastleRights = false;
+
+            foreach (var rook in board.GetWhitePieces<Rook>())
+            {
+                rook.HasCastleRights = false;
+            }
+        }
+
+        if (rights.Contains('q'))
+        {
+            ((Rook)board["A8"]).HasCastleRights = true;
+            ((King)board["E8"]).HasCastleRights = true;
+        }
+        else if (board["A1"] is not null and Rook)
+        {
+            ((Rook)board["A8"]).HasCastleRights = false;
+        }
+
+        if (rights.Contains('k'))
+        {
+            ((Rook)board["H8"]).HasCastleRights = true;
+            ((King)board["E8"]).HasCastleRights = true;
+        }
+        else if (board["A1"] is not null and Rook)
+        {
+            ((Rook)board["H8"]).HasCastleRights = false;
+        }
+
+        //No black castling rights remain
+        if (!rights.Contains('q') && !rights.Contains('k'))
+        {
+            var king = board.GetBlackPieces<King>().First();
+            king.HasCastleRights = false;
+
+            foreach (var rook in board.GetBlackPieces<Rook>())
+            {
+                rook.HasCastleRights = false;
+            }
         }
     }
 }
