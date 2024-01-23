@@ -2,9 +2,10 @@
 
 public class Knight : Piece
 {
+    public override string Name { get => "Knight"; }
+    public override string Letter { get => "N"; }
+
     public Knight()
     {
-        Name = "Knight";
-        Letter = "N";
     }
 }
