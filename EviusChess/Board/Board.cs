@@ -1,4 +1,4 @@
-﻿namespace EviusChess;
+﻿namespace EviusChess.Board;
 
 /*
  * Chess board
@@ -40,9 +40,11 @@ public class Board
         _squares = new Piece[totalSquares];
     }
 
+    #region Mailbox
+
     public int Mailbox(int x, int y)
     {
-        return (x - 1) + ((y - 1) * BoardHeight);
+        return x - 1 + (y - 1) * BoardHeight;
     }
 
     public int Mailbox(string x, int y)
@@ -62,6 +64,10 @@ public class Board
         var (x, y) = Utils.SplitNotation(input);
         return Mailbox(x, y);
     }
+
+    #endregion Mailbox
+
+    #region Iterators
 
     public IEnumerable<Piece> GetAllPieces()
     {
@@ -123,6 +129,10 @@ public class Board
         }
     }
 
+    #endregion Iterators
+
+    #region Accessors
+
     public Piece this[int i]
     {
         get => _squares[i];
@@ -160,4 +170,6 @@ public class Board
             _squares[Mailbox(x, y)] = value;
         }
     }
+
+    #endregion Accessors
 }

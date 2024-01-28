@@ -1,4 +1,6 @@
-﻿namespace EviusTests.EviusChess.BoardTests;
+﻿using EviusChess.Board;
+
+namespace EviusTests.EviusChess.BoardTests;
 
 public class BoardGeneralTests
 {    

@@ -1,4 +1,5 @@
-﻿using EviusChess.Pieces;
+﻿using EviusChess.Board;
+using EviusChess.Pieces;
 
 namespace EviusTests.EviusChess.BoardTests;
 

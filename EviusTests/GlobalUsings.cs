@@ -12,3 +12,4 @@ global using Xunit;
 //Internal Dependancies
 global using EviusChess;
 global using EviusChess.Pieces;
+global using EviusChess.Board;

@@ -1,4 +1,6 @@
-﻿namespace EviusCLI.Shell;
+﻿using EviusChess.Board;
+
+namespace EviusCLI.Shell;
 
 internal class Args
 {

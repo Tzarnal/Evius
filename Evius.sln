@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EviusUCI", "EviusUCI\EviusUCI.csproj", "{E8ECD2FB-8CCC-47F3-8A6E-E2E39AD2E0B7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{308C8DA5-AA1B-4D73-91D9-08EC8E51FE82} = {308C8DA5-AA1B-4D73-91D9-08EC8E51FE82}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EviusChess", "EviusChess\EviusChess.csproj", "{882FC9F9-B734-4E80-A3DD-DC624DD47D1C}"
 EndProject

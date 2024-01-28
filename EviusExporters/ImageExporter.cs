@@ -2,6 +2,7 @@
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Drawing.Processing;
+using EviusChess.Board;
 
 namespace EviusExporters;
 
