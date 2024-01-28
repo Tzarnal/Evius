@@ -8,8 +8,13 @@ internal class EviusUCIShell
     {
         _running = true;
 
-        Console.WriteLine("Evius Chess");
+        Console.WriteLine("Evius Chess UCI");
 
+        Listen();
+    }
+
+    private void Listen()
+    {
         while (_running)
         {
             var consoleLine = Console.ReadLine();
@@ -21,44 +26,49 @@ internal class EviusUCIShell
 
             var commandElements = consoleLine.Split(" ");
 
-            switch (commandElements[0].ToLower())
-            {
-                case "uci":
-                    CommandUci();
-                    break;
+            Dispatch(commandElements[0], consoleLine);
+        }
+    }
 
-                case "isready":
-                    CommandIsReady();
-                    break;
+    private void Dispatch(string command, string line)
+    {
+        switch (command.ToLower())
+        {
+            case "uci":
+                CommandUci();
+                break;
 
-                case "go":
-                    CommandGo(consoleLine);
-                    break;
+            case "isready":
+                CommandIsReady();
+                break;
 
-                case "stop":
-                    //stop calculating as fast as possible
-                    //Expected response: bestmove <move>
-                    break;
+            case "go":
+                CommandGo(line);
+                break;
 
-                case "ucinewgame":
-                    //setup a new game, no expected response
-                    break;
+            case "stop":
+                //stop calculating as fast as possible
+                //Expected response: bestmove <move>
+                break;
 
-                case "position":
-                    //receive a position
-                    break;
+            case "ucinewgame":
+                //setup a new game, no expected response
+                break;
 
-                case "q":
-                case "quit":
-                case "exit":
-                case "close":
-                    CommandQuit();
-                    break;
+            case "position":
+                //receive a position
+                break;
 
-                default:
-                    CommandDefault();
-                    break;
-            }
+            case "q":
+            case "quit":
+            case "exit":
+            case "close":
+                CommandQuit();
+                break;
+
+            default:
+                CommandDefault();
+                break;
         }
     }
 
@@ -86,6 +96,6 @@ internal class EviusUCIShell
 
     private void CommandDefault()
     {
-        Console.WriteLine("Evius: This is a UCI interface for the Evius chessbot, use quit to exit.");
+        Console.WriteLine("Evius: This is a UCI interface for the Evius chessbot, use q or quit to exit.");
     }
 }

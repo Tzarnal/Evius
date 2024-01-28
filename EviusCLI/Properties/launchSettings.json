@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EviusCLI": {
+      "commandName": "Project",
+      "commandLineArgs": "exportimagetest quit"
+    }
+  }
+}

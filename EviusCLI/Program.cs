@@ -1,6 +1,4 @@
-﻿using EviusUCI.Shell;
-
-//Debugger.Launch();
+﻿using EviusCLI.Shell;
 
 //Remove old log
 File.Delete("log.txt");
@@ -11,6 +9,13 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File("log.txt")
     .CreateLogger();
 
+//Process Args
+Args a = new();
+a.ProcesssArgs(args);
+
+if (a.CloseAfterArgs)
+    return;
+
 //Instantiate UCI Shell and handoff execution
-EviusUCIShell shell = new();
+CLI shell = new();
 shell.Run();
