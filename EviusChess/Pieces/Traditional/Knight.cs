@@ -1,11 +1,11 @@
 ﻿namespace EviusChess.Pieces;
 
+public class KnightInformation : IPieceInformation
+{
+    public string Name => "Knight";
+    public string Letter => "N";
+}
+
 public class Knight : Piece
 {
-    public override string Name { get => "Knight"; }
-    public override string Letter { get => "N"; }
-
-    public Knight()
-    {
-    }
 }

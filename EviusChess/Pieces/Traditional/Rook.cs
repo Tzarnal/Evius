@@ -1,13 +1,12 @@
 ﻿namespace EviusChess.Pieces;
 
+public class RookInformation : IPieceInformation
+{
+    public string Name => "Rook";
+    public string Letter => "R";
+}
+
 public class Rook : Piece
 {
-    public override string Name { get => "Rook"; }
-    public override string Letter { get => "R"; }
-
     public bool HasCastleRights { get => !HasMoved; set => HasMoved = !value; }
-
-    public Rook()
-    {
-    }
 }

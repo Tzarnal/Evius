@@ -48,7 +48,7 @@ public static class ImageExporter
     private static Image GetPieceImage(Piece piece, int pieceSize)
     {
         var color = piece.IsWhite ? "White" : "Black";
-        var name = piece.Name;
+        var name = PieceInformation.Find(piece).Name;
         var imagePath = $"Assets/Classic Pieces/{color} {name}.png";
 
         var image = Image.Load(imagePath);
