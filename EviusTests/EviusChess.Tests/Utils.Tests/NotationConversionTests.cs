@@ -5,7 +5,7 @@ public class NotationConversionTests
     [Fact]
     public void CharAIs1()
     {
-        var result = Utils.ToInt('A');
+        var result = Utils.LetterToInt('A');
 
         Assert.Equal(1, result);
     }
@@ -13,7 +13,7 @@ public class NotationConversionTests
     [Fact]
     public void CharaIs1()
     {
-        var result = Utils.ToInt('a');
+        var result = Utils.LetterToInt('a');
 
         Assert.Equal(1, result);
     }
@@ -21,7 +21,7 @@ public class NotationConversionTests
     [Fact]
     public void CharAIs1Backwards()
     {
-        var result = Utils.ToChar(1);
+        var result = Utils.IntToChar(1);
 
         Assert.Equal('A', result);
     }
@@ -29,7 +29,7 @@ public class NotationConversionTests
     [Fact]
     public void StringAIs1()
     {
-        var result = Utils.ToInt("A");
+        var result = Utils.LetterToInt("A");
 
         Assert.Equal(1, result);
     }
@@ -37,7 +37,7 @@ public class NotationConversionTests
     [Fact]
     public void StringaIs1()
     {
-        var result = Utils.ToInt("a");
+        var result = Utils.LetterToInt("a");
 
         Assert.Equal(1, result);
     }
@@ -45,7 +45,7 @@ public class NotationConversionTests
     [Fact]
     public void StringAIs1Backwards()
     {
-        var result = Utils.ToString(1);
+        var result = Utils.IntToString(1);
 
         Assert.Equal("A", result);
     }
@@ -53,7 +53,7 @@ public class NotationConversionTests
     [Fact]
     public void His8()
     {
-        var result = Utils.ToInt("H");
+        var result = Utils.LetterToInt("H");
 
         Assert.Equal(8, result);
     }
@@ -61,7 +61,7 @@ public class NotationConversionTests
     [Fact]
     public void His8Backwards()
     {
-        var result = Utils.ToString(8);
+        var result = Utils.IntToString(8);
 
         Assert.Equal("H", result);
     }
@@ -69,7 +69,7 @@ public class NotationConversionTests
     [Fact]
     public void Zis26()
     {
-        var result = Utils.ToInt("Z");
+        var result = Utils.LetterToInt("Z");
 
         Assert.Equal(26, result);
     }
@@ -77,7 +77,7 @@ public class NotationConversionTests
     [Fact]
     public void Zis26Backwards()
     {
-        var result = Utils.ToString(26);
+        var result = Utils.IntToString(26);
         Assert.Equal("Z", result);
     }
 }

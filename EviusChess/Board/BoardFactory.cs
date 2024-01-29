@@ -4,14 +4,14 @@ namespace EviusChess.Board;
 
 public static class BoardFactory
 {
-    public static Board EmptyBoard()
+    public static GameBoard EmptyBoard()
     {
-        return new Board();
+        return new GameBoard();
     }
 
-    public static Board ClassicStartingBoard()
+    public static GameBoard ClassicStartingBoard()
     {
-        var board = new Board();
+        var board = new GameBoard();
 
         board["A", 1] = new Rook { IsWhite = true };
         board["B", 1] = new Knight { IsWhite = true };
@@ -50,11 +50,12 @@ public static class BoardFactory
         board["H", 7] = new Pawn { IsBlack = true };
 
         board.FullMoveCount = 1;
+        board.WhiteToMove = true;
 
         return board;
     }
 
-    public static Board FromFen(string Fen)
+    public static GameBoard FromFen(string Fen)
     {
         const string FenMatchRegex = "\\s*^(((?:[rnbqkpRNBQKP1-8]+\\/){7})[rnbqkpRNBQKP1-8]+)\\s([b|w])\\s(-|[K|Q|k|q]{1,4})\\s(-|[a-h][1-8])\\s(\\d+\\s\\d+)$";
         var FenMatch = Regex.Match(Fen, FenMatchRegex);
@@ -64,7 +65,7 @@ public static class BoardFactory
             throw new Exception("Not a fen string");
         }
 
-        var board = new Board();
+        var board = new GameBoard();
 
         //Piece Placement
         FenPiecePlacement(board, FenMatch.Groups[1].Value);
@@ -115,7 +116,7 @@ public static class BoardFactory
         return board;
     }
 
-    private static void FenPiecePlacement(Board Board, string PiecePlacementString)
+    private static void FenPiecePlacement(GameBoard Board, string PiecePlacementString)
     {
         int x = 1;
         int y = 8;
@@ -200,17 +201,17 @@ public static class BoardFactory
         }
     }
 
-    private static void FenCastleRights(Board board, string rights)
+    private static void FenCastleRights(GameBoard board, string rights)
     {
         //No pieces have castling rights
         if (rights != "-")
         {
-            foreach (var rook in board.GetPieces<Rook>())
+            foreach (var (rook, _) in board.GetPieces<Rook>())
             {
                 rook.HasCastleRights = false;
             }
 
-            foreach (var king in board.GetPieces<King>())
+            foreach (var (king, _) in board.GetPieces<King>())
             {
                 king.HasCastleRights = false;
             }
@@ -239,10 +240,10 @@ public static class BoardFactory
         //No white castling rights remain
         if (!rights.Contains('Q') && !rights.Contains('Q'))
         {
-            var king = board.GetWhitePieces<King>().First();
+            var (king, _) = board.GetWhitePieces<King>().First();
             king.HasCastleRights = false;
 
-            foreach (var rook in board.GetWhitePieces<Rook>())
+            foreach (var (rook, _) in board.GetWhitePieces<Rook>())
             {
                 rook.HasCastleRights = false;
             }
@@ -271,10 +272,10 @@ public static class BoardFactory
         //No black castling rights remain
         if (!rights.Contains('q') && !rights.Contains('k'))
         {
-            var king = board.GetBlackPieces<King>().First();
+            var (king, _) = board.GetBlackPieces<King>().First();
             king.HasCastleRights = false;
 
-            foreach (var rook in board.GetBlackPieces<Rook>())
+            foreach (var (rook, _) in board.GetBlackPieces<Rook>())
             {
                 rook.HasCastleRights = false;
             }

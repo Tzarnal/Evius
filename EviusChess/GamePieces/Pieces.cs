@@ -1,16 +1,10 @@
-﻿namespace EviusChess.Pieces;
+﻿namespace EviusChess.GamePieces;
 
-public interface IPieceInformation
+public static class Pieces
 {
-    string Name { get; }
-    string Letter { get; }
-}
-
-public static class PieceInformation
-{
-    public static Dictionary<Type, IPieceInformation> PieceList = new()
+    public static Dictionary<Type, IPieceInformation> PieceList { get; } = new()
     {
-        //{ typeof(Piece), new PieceInformation() }
+        //{ typeof(Piece),  new PieceInformation() }
         { typeof(Bishop),   new BishopInformation() },
         { typeof(King),     new KingInformation() },
         { typeof(Knight),   new KnightInformation() },

@@ -10,5 +10,5 @@ global using Serilog;
 
 //Internal Dependancies
 global using EviusChess;
-global using EviusChess.Pieces;
+global using EviusChess.GamePieces;
 global using EviusChess.Board;

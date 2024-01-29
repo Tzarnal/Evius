@@ -17,10 +17,10 @@
  *  X axis = a,b,c,d,e,f,g,h etc
  *  Y axis = 1,2,3,4,5,6,7,8
  *
- *  Start from a and 1, reduce to 0, 0 in indexer
+ *  Start from a and 1, reduce to 0, 0 in Mailbox
  */
 
-public class Board
+public class GameBoard
 {
     private Piece[] _squares;
     public int BoardWidth { get; }
@@ -31,13 +31,30 @@ public class Board
     public bool WhiteToMove { get; set; }
     public bool BlackToMove { get => !WhiteToMove; set => WhiteToMove = !value; }
 
-    public Board(int width = 8, int height = 8)
+    public GameBoard(int width = 8, int height = 8, bool whiteToMove = true)
     {
         BoardWidth = width;
         BoardHeight = height;
 
+        WhiteToMove = whiteToMove;
+
         var totalSquares = width * height;
         _squares = new Piece[totalSquares];
+    }
+
+    public bool SquareInBounds(int square)
+    {
+        if (square < 0) return false;
+        if (square > _squares.Length) return false;
+        return true;
+    }
+
+    public string SquaretoAlgabraic(int square)
+    {
+        var row = (square % BoardWidth) + 1;
+        var col = (square / BoardWidth) + 1;
+
+        return $"{Utils.IntToString(row)}{col}";
     }
 
     #region Mailbox
@@ -49,13 +66,13 @@ public class Board
 
     public int Mailbox(string x, int y)
     {
-        int xNumber = Utils.ToInt(x);
+        int xNumber = Utils.LetterToInt(x);
         return Mailbox(xNumber, y);
     }
 
     public int Mailbox(char x, int y)
     {
-        int xNumber = Utils.ToInt(x);
+        int xNumber = Utils.LetterToInt(x);
         return Mailbox(xNumber, y);
     }
 
@@ -69,62 +86,68 @@ public class Board
 
     #region Iterators
 
-    public IEnumerable<Piece> GetAllPieces()
+    public IEnumerable<(Piece piece, int square)> GetAllPieces()
     {
         for (int i = 0; i < _squares.Length; i++)
         {
             if (_squares[i] != null)
             {
-                yield return _squares[i];
+                yield return (_squares[i], i);
             }
         }
     }
 
-    public IEnumerable<Piece> GetAllWhitePieces()
+    public IEnumerable<(Piece piece, int square)> GetAllWhitePieces()
     {
-        foreach (var piece in GetAllPieces())
+        foreach (var (piece, square) in GetAllPieces())
         {
-            if (piece.IsWhite) yield return piece;
+            if (piece.IsWhite) yield return (piece, square);
         }
     }
 
-    public IEnumerable<Piece> GetAllBlackPieces()
+    public IEnumerable<(Piece piece, int square)> GetAllBlackPieces()
     {
-        foreach (var piece in GetAllPieces())
+        foreach (var (piece, square) in GetAllPieces())
         {
-            if (piece.IsBlack) yield return piece;
+            if (piece.IsBlack) yield return (piece, square);
         }
     }
 
-    public IEnumerable<T> GetPieces<T>()
+    public IEnumerable<(T piece, int square)> GetPieces<T>()
     {
         foreach (var piece in GetAllPieces())
         {
-            if (piece is T)
+            if (piece.piece is T)
             {
-                yield return (T)Convert.ChangeType(piece, typeof(T));
+                var actualPiece = (T)Convert.ChangeType(piece.piece, typeof(T));
+
+                yield return (actualPiece, piece.square);
             }
         }
     }
 
-    public IEnumerable<T> GetWhitePieces<T>()
+    public IEnumerable<(T piece, int square)> GetWhitePieces<T>()
     {
         foreach (var piece in GetAllWhitePieces())
         {
-            if (piece is T)
+            if (piece.piece is T)
             {
-                yield return (T)Convert.ChangeType(piece, typeof(T));
+                var actualPiece = (T)Convert.ChangeType(piece.piece, typeof(T));
+
+                yield return (actualPiece, piece.square);
             }
         }
     }
 
-    public IEnumerable<T> GetBlackPieces<T>()
+    public IEnumerable<(T piece, int square)> GetBlackPieces<T>()
     {
         foreach (var piece in GetAllBlackPieces())
         {
-            if (piece is T)
+            if (piece.piece is T)
             {
-                yield return (T)Convert.ChangeType(piece, typeof(T));
+                var actualPiece = (T)Convert.ChangeType(piece.piece, typeof(T));
+
+                yield return (actualPiece, piece.square);
             }
         }
     }

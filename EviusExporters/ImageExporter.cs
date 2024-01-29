@@ -8,7 +8,7 @@ namespace EviusExporters;
 
 public static class ImageExporter
 {
-    public static void SaveImage(Board board, string path, int squareSize = 64, int pieceSize = 48)
+    public static void SaveImage(GameBoard board, string path, int squareSize = 64, int pieceSize = 48)
     {
         var image = BaseImage(board, squareSize);
         image = DrawPieces(image, board, squareSize, pieceSize);
@@ -16,7 +16,7 @@ public static class ImageExporter
         image.Save(path);
     }
 
-    public static Image DrawPieces(Image image, Board board, int squareSize, int pieceSize)
+    public static Image DrawPieces(Image image, GameBoard board, int squareSize, int pieceSize)
     {
         int pieceOffset = (squareSize - pieceSize) / 2;
 
@@ -49,7 +49,7 @@ public static class ImageExporter
     private static Image GetPieceImage(Piece piece, int pieceSize)
     {
         var color = piece.IsWhite ? "White" : "Black";
-        var name = PieceInformation.Find(piece).Name;
+        var name = Pieces.Find(piece).Name;
         var imagePath = $"Assets/Classic Pieces/{color} {name}.png";
 
         var image = Image.Load(imagePath);
@@ -58,7 +58,7 @@ public static class ImageExporter
         return image;
     }
 
-    private static Image BaseImage(Board board, int squareSize)
+    private static Image BaseImage(GameBoard board, int squareSize)
     {
         var colorA = Color.ParseHex("E9EDCC");
         var colorB = Color.ParseHex("779954");

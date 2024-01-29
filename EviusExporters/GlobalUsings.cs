@@ -7,4 +7,4 @@ global using System.Threading.Tasks;
 
 //Internal Dependancies
 global using EviusChess;
-global using EviusChess.Pieces;
+global using EviusChess.GamePieces;

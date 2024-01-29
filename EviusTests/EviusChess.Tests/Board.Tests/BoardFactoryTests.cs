@@ -1,5 +1,4 @@
 ﻿using EviusChess.Board;
-using EviusChess.Pieces;
 
 namespace EviusTests.EviusChess.BoardTests;
 
@@ -68,8 +67,8 @@ public class BoardFactoryTests
             }
             else
             {
-                var expectedName = PieceInformation.Find(e).Name;
-                var pieceName = PieceInformation.Find(p).Name;
+                var expectedName = Pieces.Find(e).Name;
+                var pieceName = Pieces.Find(p).Name;
 
                 Assert.Equal(e.IsWhite, p.IsWhite);
                 Assert.Equal(expectedName, pieceName);

@@ -1,4 +1,5 @@
 ﻿using EviusChess.Board;
+using EviusChess.Moves;
 
 namespace EviusCLI.Shell;
 
@@ -22,6 +23,10 @@ internal class Args
                 QuitCommand();
                 break;
 
+            case "movegentest":
+                TestMoveGen();
+                break;
+
             case "quit":
                 ExportImageCommand();
                 break;
@@ -34,6 +39,23 @@ internal class Args
         .SaveImage(BoardFactory.FromFen(
             "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"),
             "test.png");
+    }
+
+    private static void TestMoveGen()
+    {
+        var b = BoardFactory.ClassicStartingBoard();
+        var moves = MoveGenerator.GenerateFromBoard(b);
+        foreach (var move in moves)
+        {
+            Console.WriteLine($"{move.MovingPiece} to {b.SquaretoAlgabraic(move.TargetSquare)}");
+        }
+
+        //b.BlackToMove = true;
+        //moves = MoveGenerator.GenerateFromBoard(b);
+        //foreach (var move in moves)
+        //{
+        //    Console.WriteLine($"{move.MovingPiece} to {b.SquaretoAlgabraic(move.TargetSquare)}");
+        //}
     }
 
     private void QuitCommand()

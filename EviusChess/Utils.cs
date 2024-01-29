@@ -4,7 +4,7 @@ public static class Utils
 {
     private static readonly string _alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    public static int ToInt(string input)
+    public static int LetterToInt(string input)
     {
         if (input.Length != 1)
         {
@@ -14,25 +14,25 @@ public static class Utils
         return _alphabet.IndexOf(input, StringComparison.CurrentCultureIgnoreCase) + 1;
     }
 
-    public static int ToInt(char input)
+    public static int LetterToInt(char input)
     {
         input = char.ToUpper(input);
         return _alphabet.IndexOf(input) + 1;
     }
 
-    public static string ToString(int input)
+    public static string IntToString(int input)
     {
         return _alphabet[input - 1].ToString();
     }
 
-    public static char ToChar(int input)
+    public static char IntToChar(int input)
     {
         return _alphabet[input - 1];
     }
 
     public static (int x, int y) SplitNotation(string value)
     {
-        var x = ToInt(value[0]);
+        var x = LetterToInt(value[0]);
         var y = int.Parse(value[1..]);
         return new(x, y);
     }
