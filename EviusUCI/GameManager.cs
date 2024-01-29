@@ -14,7 +14,7 @@ public class GameManager
     public GameManager()
     {
         Board = BoardFactory.ClassicStartingBoard();
-        Moves = new List<Move>();
+        Moves = [];
         _generator = new MoveGenerator(Board);
     }
 
@@ -95,19 +95,15 @@ public class GameManager
         var from = Board.Mailbox(fromString);
         var to = Board.Mailbox(toString);
 
-        var movingPiece = Board[from];
-        var capture = Board[to] != null;
-        var targetPiece = Board[to];
-
         var boardMove = new Move
         {
-            MovingPiece = movingPiece,
-
             OriginSquare = from,
-            TargetSquare = to,
+            MovingPiece = Board[from],
 
-            IsCapture = capture,
-            TargetPiece = targetPiece
+            TargetSquare = to,
+            TargetPiece = Board[to],
+
+            IsCapture = Board[to] != null,
         };
 
         Board.PlayMove(boardMove);

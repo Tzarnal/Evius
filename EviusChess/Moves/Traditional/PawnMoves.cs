@@ -47,4 +47,50 @@ public static class TraditionalPawnMoves
 
         return moves;
     }
+
+    public static IEnumerable<Move> PawnTake(GameBoard board, int square, Piece piece, List<Move> moves, MoveDirections d)
+    {
+        var possibleMoves = new List<int>();
+
+        if (piece.IsWhite)
+        {
+            possibleMoves.Add(d.NorthEast);
+            possibleMoves.Add(d.NorthWest);
+        }
+        else
+        {
+            possibleMoves.Add(d.SouthEast);
+            possibleMoves.Add(d.SouthWest);
+        }
+
+        foreach (var possibleMove in possibleMoves)
+        {
+            var targetSquare = square + possibleMove;
+
+            var outOfBounds = !board.SquareInBounds(targetSquare);
+            var hasPiece = board[targetSquare] != null;
+            var targetPiece = board[targetSquare];
+
+            if (outOfBounds || !hasPiece || targetPiece.IsWhite == board.WhiteToMove)
+            {
+                continue;
+            }
+
+            //TODO, Checks for move across board edge weirdness
+
+            var move = new Move
+            {
+                MovingPiece = piece,
+                OriginSquare = square,
+                TargetSquare = targetSquare,
+
+                IsCapture = true,
+                TargetPiece = board[targetSquare]
+            };
+
+            moves.Add(move);
+        }
+
+        return moves;
+    }
 }

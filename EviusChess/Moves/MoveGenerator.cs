@@ -104,6 +104,17 @@ public class MoveGenerator
 
     public List<Move> GeneratePieceTakes(GameBoard board, int square, List<Move> moves)
     {
+        var piece = board[square];
+
+        foreach (var moveType in Pieces.Find(piece).TakeTypes)
+        {
+            switch (moveType)
+            {
+                case MoveType.PawnTake:
+                    TraditionalPawnMoves.PawnTake(board, square, piece, moves, _moveDirections);
+                    break;
+            }
+        }
         return moves;
     }
 
