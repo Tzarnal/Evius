@@ -4,7 +4,7 @@ public interface IPieceInformation
 {
     string Name { get; }
     string Letter { get; }
-
+    bool SeperateMoveTake { get; }
     IEnumerable<MoveType> MoveTypes { get; }
     IEnumerable<MoveType> TakeTypes { get; }
     IEnumerable<MoveType> SpecialMoveTypes { get; }

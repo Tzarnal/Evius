@@ -4,7 +4,7 @@ public class QueenInformation : IPieceInformation
 {
     public string Name => "Queen";
     public string Letter => "Q";
-
+    public bool SeperateMoveTake => false;
     public IEnumerable<MoveType> MoveTypes => [MoveType.SlideDiagonals, MoveType.SlideCardinals];
     public IEnumerable<MoveType> TakeTypes => [MoveType.SlideDiagonals, MoveType.SlideCardinals];
     public IEnumerable<MoveType> SpecialMoveTypes => [];

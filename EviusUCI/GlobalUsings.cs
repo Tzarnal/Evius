@@ -12,3 +12,4 @@ global using Serilog;
 global using EviusChess;
 global using EviusChess.GamePieces;
 global using EviusChess.Board;
+global using EviusChess.Moves;

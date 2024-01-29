@@ -4,6 +4,7 @@ public class KingInformation : IPieceInformation
 {
     public string Name => "King";
     public string Letter => "K";
+    public bool SeperateMoveTake => false;
 
     public IEnumerable<MoveType> MoveTypes =>
         [MoveType.StepDiagonals, MoveType.StepCardinals];

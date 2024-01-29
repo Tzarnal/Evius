@@ -4,7 +4,7 @@ public class BishopInformation : IPieceInformation
 {
     public string Name => "Bishop";
     public string Letter => "B";
-
+    public bool SeperateMoveTake => false;
     public IEnumerable<MoveType> MoveTypes => [MoveType.SlideDiagonals];
     public IEnumerable<MoveType> TakeTypes => [MoveType.SlideDiagonals];
     public IEnumerable<MoveType> SpecialMoveTypes => [];

@@ -3,10 +3,12 @@
 internal class EviusUCIShell
 {
     private bool _running;
+    private GameManager _manager;
 
     public void Run()
     {
         _running = true;
+        _manager = new GameManager();
 
         Console.WriteLine("Evius Chess UCI");
 
@@ -47,16 +49,16 @@ internal class EviusUCIShell
                 break;
 
             case "stop":
-                //stop calculating as fast as possible
-                //Expected response: bestmove <move>
+                CommandStop();
                 break;
 
             case "ucinewgame":
                 //setup a new game, no expected response
+                _manager = new GameManager();
                 break;
 
             case "position":
-                //receive a position
+                CommandPosition(line);
                 break;
 
             case "q":
@@ -74,7 +76,19 @@ internal class EviusUCIShell
 
     private void CommandGo(string input)
     {
-        Console.WriteLine("bestmove a2a3");
+        var response = _manager.Go();
+        Console.WriteLine($"bestmove {response}");
+    }
+
+    private void CommandStop()
+    {
+        var response = _manager.Stop();
+        Console.WriteLine($"bestmove {response}");
+    }
+
+    private void CommandPosition(string input)
+    {
+        _manager.MakeUCIMoves(input.Split(" "));
     }
 
     private void CommandUci()

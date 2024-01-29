@@ -1,42 +1,54 @@
-﻿using Microsoft.VisualBasic;
+﻿namespace EviusChess.Moves;
 
-namespace EviusChess.Moves;
+public record MoveDirections
+{
+    public int BoardWidth;
+    public int BoardHeight;
+
+    public int North;
+    public int South;
+    public int East;
+    public int West;
+
+    public int NorthWest;
+    public int NorthEast;
+    public int SouthWest;
+    public int SouthEast;
+}
 
 public class MoveGenerator
 {
-    private int BoardWidth;
-    private int BoardHeight;
-
-    private int North;
-    private int South;
-    private int East;
-    private int West;
-
-    private int NorthWest;
-    private int NorthEast;
-    private int SouthWest;
-    private int SouthEast;
+    private MoveDirections _moveDirections;
 
     public MoveGenerator(int Width, int Height)
     {
-        BoardWidth = Width;
-        BoardHeight = Height;
-
-        CalculateDirections();
+        _moveDirections = CalculateDirections(Width, Height);
     }
 
     public MoveGenerator(GameBoard board)
     {
-        BoardWidth = board.BoardWidth;
-        BoardHeight = board.BoardHeight;
-
-        CalculateDirections();
+        _moveDirections = CalculateDirections(board.BoardWidth, board.BoardHeight);
     }
 
-    private void CalculateDirections()
+    private MoveDirections CalculateDirections(int Width, int Height)
     {
-        North = BoardWidth;
-        South = BoardWidth * -1;
+        return new()
+        {
+            BoardHeight = Height,
+            BoardWidth = Width,
+
+            North = Width,
+            South = Width * -1,
+
+            East = +1,
+            West = -1,
+
+            NorthWest = Width + -1,
+            NorthEast = Width + +1,
+
+            SouthWest = Width * -1 + -1,
+            SouthEast = Width * -1 + +1,
+        };
     }
 
     public static IEnumerable<Move> GenerateFromBoard(GameBoard board)
@@ -48,7 +60,7 @@ public class MoveGenerator
     public IEnumerable<Move> GenerateAllMoves(GameBoard board)
     {
         List<(Piece piece, int square)> piecesToMove;
-        IEnumerable<Move> moves = [];
+        List<Move> moves = [];
 
         if (board.WhiteToMove)
         {
@@ -61,19 +73,21 @@ public class MoveGenerator
 
         foreach (var (piece, square) in piecesToMove)
         {
-            var pieceMoves = GeneratePieceMoves(board, square);
-            var pieceTakes = GeneratePieceTakes(board, square);
-            var pieceSpecialMoves = GeneratePieceSpecial(board, square);
-
-            moves = moves.Concat(pieceMoves).Concat(pieceTakes).Concat(pieceSpecialMoves);
+            if (Pieces.Find(piece).SeperateMoveTake)
+            {
+                GeneratePieceMoves(board, square, moves);
+                GeneratePieceTakes(board, square, moves);
+            }
+            else
+            {
+            }
+            var pieceSpecialMoves = GeneratePieceSpecial(board, square, moves);
         }
-
         return moves.Distinct();
     }
 
-    public List<Move> GeneratePieceMoves(GameBoard board, int square)
+    public List<Move> GeneratePieceMoves(GameBoard board, int square, List<Move> moves)
     {
-        List<Move> moves = [];
         var piece = board[square];
 
         foreach (var moveType in Pieces.Find(piece).MoveTypes)
@@ -81,70 +95,20 @@ public class MoveGenerator
             switch (moveType)
             {
                 case MoveType.PawnSlideForward:
-                    PawnMove(board, square, piece, moves);
+                    TraditionalPawnMoves.PawnMove(board, square, piece, moves, _moveDirections);
                     break;
             }
         }
         return moves;
     }
 
-    public List<Move> GeneratePieceTakes(GameBoard board, int square)
+    public List<Move> GeneratePieceTakes(GameBoard board, int square, List<Move> moves)
     {
-        List<Move> moves = [];
-
         return moves;
     }
 
-    public List<Move> GeneratePieceSpecial(GameBoard board, int square)
+    public List<Move> GeneratePieceSpecial(GameBoard board, int square, List<Move> moves)
     {
-        List<Move> moves = [];
-
-        return moves;
-    }
-
-    public IEnumerable<Move> PawnMove(GameBoard board, int square, Piece piece, List<Move> moves)
-    {
-        var possibleMoves = new List<int>();
-
-        if (piece.IsWhite)
-        {
-            possibleMoves.Add(North);
-            if (!piece.HasMoved)
-            {
-                possibleMoves.Add(North + North);
-            }
-        }
-        else
-        {
-            possibleMoves.Add(South);
-            if (!piece.HasMoved)
-            {
-                possibleMoves.Add(South + South);
-            }
-        }
-
-        foreach (var possibleMove in possibleMoves)
-        {
-            var targetSquare = square + possibleMove;
-
-            var outOfBounds = !board.SquareInBounds(targetSquare);
-            var hasPiece = board[targetSquare] != null;
-
-            if (outOfBounds || hasPiece)
-            {
-                continue;
-            }
-
-            var move = new Move
-            {
-                MovingPiece = piece,
-                OriginSquare = square,
-                TargetSquare = targetSquare,
-            };
-
-            moves.Add(move);
-        }
-
         return moves;
     }
 }

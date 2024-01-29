@@ -57,6 +57,18 @@ public class GameBoard
         return $"{Utils.IntToString(row)}{col}";
     }
 
+    public void PlayMove(Move move)
+    {
+        _squares[move.TargetSquare] = _squares[move.OriginSquare];
+        _squares[move.OriginSquare] = null;
+
+        move.MovingPiece.HandleMove(move.TargetSquare, move.OriginSquare);
+
+        WhiteToMove = !WhiteToMove;
+
+        //TODO, Counters logic
+    }
+
     #region Mailbox
 
     public int Mailbox(int x, int y)

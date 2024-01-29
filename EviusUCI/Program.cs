@@ -1,4 +1,5 @@
 ﻿using EviusUCI.Shell;
+using System.Diagnostics;
 
 //Debugger.Launch();
 
@@ -7,8 +8,8 @@ File.Delete("log.txt");
 
 //Setup Serilog
 Log.Logger = new LoggerConfiguration()
-    //.WriteTo.Console()
-    .WriteTo.File("log.txt")
+    .WriteTo.Console()
+    //.WriteTo.File("log.txt")
     .CreateLogger();
 
 //Instantiate UCI Shell and handoff execution
