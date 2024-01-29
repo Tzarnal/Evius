@@ -1,9 +1,7 @@
-﻿using EviusChess.Board;
-
-namespace EviusTests.EviusChess.BoardTests;
+﻿namespace EviusTests.EviusChess.BoardTests;
 
 public class BoardGeneralTests
-{    
+{
     [Theory]
     [InlineData("A1", typeof(Rook))]
     [InlineData("H7", typeof(Pawn))]

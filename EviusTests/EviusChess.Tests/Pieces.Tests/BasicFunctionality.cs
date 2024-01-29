@@ -1,4 +1,4 @@
-﻿namespace EviusTests.EviusChess.Pieces;
+﻿namespace EviusTests.EviusChess.GamePieces;
 
 public class BasicFunctionality
 {
