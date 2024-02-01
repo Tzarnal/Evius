@@ -1,54 +1,31 @@
-﻿namespace EviusChess.Moves;
+﻿using EviusChess.GamePieces;
 
-public record MoveDirections
-{
-    public int BoardWidth;
-    public int BoardHeight;
+namespace EviusChess.Moves;
 
-    public int North;
-    public int South;
-    public int East;
-    public int West;
-
-    public int NorthWest;
-    public int NorthEast;
-    public int SouthWest;
-    public int SouthEast;
-}
-
-public class MoveGenerator
+public partial class MoveGenerator
 {
     private MoveDirections _moveDirections;
+    private SquareData[] _squareData;
+
+    private int _boardWidth;
+    private int _boardHeight;
 
     public MoveGenerator(int Width, int Height)
     {
-        _moveDirections = CalculateDirections(Width, Height);
+        _boardHeight = Height;
+        _boardWidth = Width;
+
+        _moveDirections = CalculateDirections();
+        _squareData = CalculateSquareData();
     }
 
     public MoveGenerator(GameBoard board)
     {
-        _moveDirections = CalculateDirections(board.BoardWidth, board.BoardHeight);
-    }
+        _boardHeight = board.BoardHeight;
+        _boardWidth = board.BoardWidth;
 
-    private MoveDirections CalculateDirections(int Width, int Height)
-    {
-        return new()
-        {
-            BoardHeight = Height,
-            BoardWidth = Width,
-
-            North = Width,
-            South = Width * -1,
-
-            East = +1,
-            West = -1,
-
-            NorthWest = Width + -1,
-            NorthEast = Width + +1,
-
-            SouthWest = Width * -1 + -1,
-            SouthEast = Width * -1 + +1,
-        };
+        _moveDirections = CalculateDirections();
+        _squareData = CalculateSquareData();
     }
 
     public static IEnumerable<Move> GenerateFromBoard(GameBoard board)
@@ -80,10 +57,24 @@ public class MoveGenerator
             }
             else
             {
+                GeneratePieceMoveTakes(board, square, moves);
             }
-            var pieceSpecialMoves = GeneratePieceSpecial(board, square, moves);
+            var pieceSpecialMoves = GeneratePieceSpecialMoves(board, square, moves);
         }
         return moves.Distinct();
+    }
+
+    public List<Move> GeneratePieceMoveTakes(GameBoard board, int square, List<Move> moves)
+    {
+        var piece = board[square];
+
+        foreach (var moveType in Pieces.Find(piece).MoveTypes)
+        {
+            switch (moveType)
+            {
+            }
+        }
+        return moves;
     }
 
     public List<Move> GeneratePieceMoves(GameBoard board, int square, List<Move> moves)
@@ -95,7 +86,7 @@ public class MoveGenerator
             switch (moveType)
             {
                 case MoveType.PawnSlideForward:
-                    TraditionalPawnMoves.PawnMove(board, square, piece, moves, _moveDirections);
+                    TraditionalPawnMove(board, square, piece, moves);
                     break;
             }
         }
@@ -111,15 +102,70 @@ public class MoveGenerator
             switch (moveType)
             {
                 case MoveType.PawnTake:
-                    TraditionalPawnMoves.PawnTake(board, square, piece, moves, _moveDirections);
+                    TraditionalPawnTake(board, square, piece, moves);
                     break;
             }
         }
         return moves;
     }
 
-    public List<Move> GeneratePieceSpecial(GameBoard board, int square, List<Move> moves)
+    public List<Move> GeneratePieceSpecialMoves(GameBoard board, int square, List<Move> moves)
     {
         return moves;
+    }
+
+    private MoveDirections CalculateDirections()
+    {
+        return new()
+        {
+            North = _boardWidth,
+            South = _boardWidth * -1,
+
+            East = +1,
+            West = -1,
+
+            NorthWest = _boardWidth + -1,
+            NorthEast = _boardWidth + +1,
+
+            SouthWest = _boardWidth * -1 + -1,
+            SouthEast = _boardWidth * -1 + +1,
+        };
+    }
+
+    private SquareData[] CalculateSquareData()
+    {
+        var totalSquares = _boardWidth * _boardHeight;
+        var squareData = new SquareData[totalSquares];
+
+        for (int w = 0; w < _boardWidth; w++)
+        {
+            for (int h = 0; h < _boardHeight; h++)
+            {
+                var i = (h * _boardWidth) + w;
+
+                var toNorth = _boardHeight - 1 - h;
+                var toSouth = h;
+                var toEast = _boardWidth - 1 - w;
+                var toWest = w;
+
+                squareData[i] = new()
+                {
+                    ToNorth = toNorth,
+                    ToSouth = toSouth,
+                    ToEast = toEast,
+                    ToWest = toWest,
+
+                    ToNorthEast = Math.Min(toNorth, toEast),
+                    ToNorthWest = Math.Min(toNorth, toWest),
+                    ToSouthEast = Math.Min(toSouth, toEast),
+                    ToSouthWest = Math.Min(toSouth, toWest),
+
+                    WestEdge = w == 0,
+                    EastEdge = w == _boardWidth - 1,
+                };
+            }
+        }
+
+        return squareData;
     }
 }

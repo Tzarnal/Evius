@@ -1,25 +1,25 @@
 ﻿namespace EviusChess.Moves;
 
-public static class TraditionalPawnMoves
+public partial class MoveGenerator
 {
-    public static IEnumerable<Move> PawnMove(GameBoard board, int square, Piece piece, List<Move> moves, MoveDirections d)
+    private List<Move> TraditionalPawnMove(GameBoard board, int square, Piece piece, List<Move> moves)
     {
         var possibleMoves = new List<int>();
 
         if (piece.IsWhite)
         {
-            possibleMoves.Add(d.North);
+            possibleMoves.Add(_moveDirections.North);
             if (!piece.HasMoved)
             {
-                possibleMoves.Add(d.North + d.North);
+                possibleMoves.Add(_moveDirections.North + _moveDirections.North);
             }
         }
         else
         {
-            possibleMoves.Add(d.South);
+            possibleMoves.Add(_moveDirections.South);
             if (!piece.HasMoved)
             {
-                possibleMoves.Add(d.South + d.South);
+                possibleMoves.Add(_moveDirections.South + _moveDirections.South);
             }
         }
 
@@ -48,19 +48,42 @@ public static class TraditionalPawnMoves
         return moves;
     }
 
-    public static IEnumerable<Move> PawnTake(GameBoard board, int square, Piece piece, List<Move> moves, MoveDirections d)
+    public List<Move> TraditionalPawnTake(GameBoard board, int square, Piece piece, List<Move> moves)
     {
         var possibleMoves = new List<int>();
+        var squareData = _squareData[square];
 
         if (piece.IsWhite)
         {
-            possibleMoves.Add(d.NorthEast);
-            possibleMoves.Add(d.NorthWest);
+            if (!squareData.WestEdge && !squareData.EastEdge)
+            {
+                possibleMoves.Add(_moveDirections.NorthEast);
+                possibleMoves.Add(_moveDirections.NorthWest);
+            }
+            else if (squareData.WestEdge)
+            {
+                possibleMoves.Add(_moveDirections.NorthEast);
+            }
+            else if (squareData.EastEdge)
+            {
+                possibleMoves.Add(_moveDirections.NorthWest);
+            }
         }
         else
         {
-            possibleMoves.Add(d.SouthEast);
-            possibleMoves.Add(d.SouthWest);
+            if (!squareData.WestEdge && !squareData.EastEdge)
+            {
+                possibleMoves.Add(_moveDirections.SouthEast);
+                possibleMoves.Add(_moveDirections.SouthWest);
+            }
+            else if (squareData.WestEdge)
+            {
+                possibleMoves.Add(_moveDirections.SouthEast);
+            }
+            else if (squareData.EastEdge)
+            {
+                possibleMoves.Add(_moveDirections.SouthWest);
+            }
         }
 
         foreach (var possibleMove in possibleMoves)
@@ -75,8 +98,6 @@ public static class TraditionalPawnMoves
             {
                 continue;
             }
-
-            //TODO, Checks for move across board edge weirdness
 
             var move = new Move
             {
