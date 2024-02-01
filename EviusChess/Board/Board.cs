@@ -59,11 +59,21 @@ public class GameBoard
 
     public void PlayMove(Move move)
     {
+        //Basic Move Logic
         _squares[move.TargetSquare] = _squares[move.OriginSquare];
-        _squares[move.OriginSquare] = null;
 
-        move.MovingPiece.HandleMove(move.TargetSquare, move.OriginSquare);
+        _squares[move.OriginSquare] = null!;
 
+        //Hand off to piece for piece specific logic
+        move.MovingPiece.HandleMove(move, this);
+
+        //Promotions and Replacements
+        if ((move.IsPromotion || move.IsReplacement) && move.ReplacementPiece != null)
+        {
+            _squares[move.TargetSquare] = move.ReplacementPiece;
+        }
+
+        //Alternate the turns
         WhiteToMove = !WhiteToMove;
 
         //TODO, Counters logic

@@ -25,6 +25,8 @@ public record SquareData
     public int ToSouthWest;
     public int ToSouthEast;
 
+    public bool NorthEdge;
+    public bool SouthEdge;
     public bool WestEdge;
     public bool EastEdge;
 }

@@ -162,6 +162,8 @@ public partial class MoveGenerator
 
                     WestEdge = w == 0,
                     EastEdge = w == _boardWidth - 1,
+                    SouthEdge = h == 0,
+                    NorthEdge = h == _boardHeight - 1,
                 };
             }
         }

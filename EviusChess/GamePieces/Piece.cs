@@ -22,7 +22,7 @@ public abstract class Piece
 
     public bool HasMoved { get; set; }
 
-    public void HandleMove(int start, int end)
+    public void HandleMove(Move move, GameBoard board)
     {
         HasMoved = true;
     }

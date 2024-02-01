@@ -1,4 +1,7 @@
-﻿namespace EviusChess.Moves;
+﻿using EviusChess.GamePieces;
+using System.Collections.Generic;
+
+namespace EviusChess.Moves;
 
 public partial class MoveGenerator
 {
@@ -26,6 +29,7 @@ public partial class MoveGenerator
         foreach (var possibleMove in possibleMoves)
         {
             var targetSquare = square + possibleMove;
+            var targetSquareData = _squareData[targetSquare];
 
             var outOfBounds = !board.SquareInBounds(targetSquare);
             var hasPiece = board[targetSquare] != null;
@@ -42,6 +46,14 @@ public partial class MoveGenerator
                 TargetSquare = targetSquare,
             };
 
+            if (targetSquareData.NorthEdge || targetSquareData.SouthEdge)
+            {
+                PawnPromotionMoves(move, moves, targetSquareData);
+            }
+            else
+            {
+                moves.Add(move);
+            }
             moves.Add(move);
         }
 
@@ -89,6 +101,7 @@ public partial class MoveGenerator
         foreach (var possibleMove in possibleMoves)
         {
             var targetSquare = square + possibleMove;
+            var targetSquareData = _squareData[targetSquare];
 
             var outOfBounds = !board.SquareInBounds(targetSquare);
             var hasPiece = board[targetSquare] != null;
@@ -109,8 +122,144 @@ public partial class MoveGenerator
                 TargetPiece = board[targetSquare]
             };
 
-            moves.Add(move);
+            if (targetSquareData.NorthEdge || targetSquareData.SouthEdge)
+            {
+                PawnPromotionMoves(move, moves, targetSquareData);
+            }
+            else
+            {
+                moves.Add(move);
+            }
         }
+
+        return moves;
+    }
+
+    public List<Move> PawnPromotionMoves(Move originalMove, List<Move> moves, SquareData squareData)
+    {
+        if (squareData.NorthEdge && originalMove.MovingPiece.IsWhite)
+        {
+            PawnPromotionMovesWhites(originalMove, moves);
+        }
+
+        if (squareData.SouthEdge && originalMove.MovingPiece.IsBlack)
+        {
+            PawnPromotionMovesWhites(originalMove, moves);
+        }
+
+        return moves;
+    }
+
+    public List<Move> PawnPromotionMovesWhites(Move originalMove, List<Move> moves)
+    {
+        moves.Add(new Move
+        {
+            MovingPiece = originalMove.MovingPiece,
+            OriginSquare = originalMove.OriginSquare,
+            TargetSquare = originalMove.TargetSquare,
+
+            IsCapture = originalMove.IsCapture,
+            TargetPiece = originalMove.TargetPiece,
+
+            IsPromotion = true,
+            ReplacementPiece = new Queen { IsWhite = true }
+        });
+
+        moves.Add(new Move
+        {
+            MovingPiece = originalMove.MovingPiece,
+            OriginSquare = originalMove.OriginSquare,
+            TargetSquare = originalMove.TargetSquare,
+
+            IsCapture = originalMove.IsCapture,
+            TargetPiece = originalMove.TargetPiece,
+
+            IsPromotion = true,
+            ReplacementPiece = new Bishop { IsWhite = true }
+        });
+
+        moves.Add(new Move
+        {
+            MovingPiece = originalMove.MovingPiece,
+            OriginSquare = originalMove.OriginSquare,
+            TargetSquare = originalMove.TargetSquare,
+
+            IsCapture = originalMove.IsCapture,
+            TargetPiece = originalMove.TargetPiece,
+
+            IsPromotion = true,
+            ReplacementPiece = new Knight { IsWhite = true }
+        });
+
+        moves.Add(new Move
+        {
+            MovingPiece = originalMove.MovingPiece,
+            OriginSquare = originalMove.OriginSquare,
+            TargetSquare = originalMove.TargetSquare,
+
+            IsCapture = originalMove.IsCapture,
+            TargetPiece = originalMove.TargetPiece,
+
+            IsPromotion = true,
+            ReplacementPiece = new Rook { IsWhite = true }
+        });
+
+        return moves;
+    }
+
+    public List<Move> PawnPromotionMovesBlack(Move originalMove, List<Move> moves)
+    {
+        moves.Add(new Move
+        {
+            MovingPiece = originalMove.MovingPiece,
+            OriginSquare = originalMove.OriginSquare,
+            TargetSquare = originalMove.TargetSquare,
+
+            IsCapture = originalMove.IsCapture,
+            TargetPiece = originalMove.TargetPiece,
+
+            IsPromotion = true,
+            ReplacementPiece = new Queen { IsBlack = true }
+        });
+
+        moves.Add(new Move
+        {
+            MovingPiece = originalMove.MovingPiece,
+            OriginSquare = originalMove.OriginSquare,
+            TargetSquare = originalMove.TargetSquare,
+
+            IsCapture = originalMove.IsCapture,
+            TargetPiece = originalMove.TargetPiece,
+
+            IsPromotion = true,
+            ReplacementPiece = new Bishop { IsBlack = true }
+        });
+
+        moves.Add(new Move
+        {
+            MovingPiece = originalMove.MovingPiece,
+            OriginSquare = originalMove.OriginSquare,
+            TargetSquare = originalMove.TargetSquare,
+
+            IsCapture = originalMove.IsCapture,
+            TargetPiece = originalMove.TargetPiece,
+
+            IsPromotion = true,
+            ReplacementPiece = new Knight { IsBlack = true }
+        });
+
+        moves.Add(new Move
+        {
+            MovingPiece = originalMove.MovingPiece,
+            OriginSquare = originalMove.OriginSquare,
+            TargetSquare = originalMove.TargetSquare,
+
+            IsCapture = originalMove.IsCapture,
+            TargetPiece = originalMove.TargetPiece,
+
+            IsPromotion = true,
+            ReplacementPiece = new Rook { IsBlack = true }
+        });
 
         return moves;
     }

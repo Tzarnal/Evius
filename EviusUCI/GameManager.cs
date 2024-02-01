@@ -49,8 +49,14 @@ public class GameManager
 
         var start = Board.SquaretoAlgabraic(BestMove.OriginSquare);
         var end = Board.SquaretoAlgabraic(BestMove.TargetSquare);
+        var promotion = "";
 
-        return $"{start}{end}".ToLower();
+        if (BestMove.IsPromotion && BestMove.ReplacementPiece != null)
+        {
+            promotion = Pieces.Find(BestMove.ReplacementPiece).Letter;
+        }
+
+        return $"{start}{end}{promotion}".ToLower();
     }
 
     public void MakeUCIMoves(string[] moveSet)
@@ -105,6 +111,34 @@ public class GameManager
 
             IsCapture = Board[to] != null,
         };
+
+        if (promote != "")
+        {
+            boardMove.IsPromotion = true;
+
+            switch (promote)
+            {
+                case "q":
+                    boardMove.ReplacementPiece = new Queen { IsWhite = Board.WhiteToMove };
+                    break;
+
+                case "r":
+                    boardMove.ReplacementPiece = new Rook { IsWhite = Board.WhiteToMove };
+                    break;
+
+                case "n":
+                    boardMove.ReplacementPiece = new Knight { IsWhite = Board.WhiteToMove };
+                    break;
+
+                case "b":
+                    boardMove.ReplacementPiece = new Bishop { IsWhite = Board.WhiteToMove };
+                    break;
+
+                default:
+                    Log.Error("Uknown promotion piece: {promote}", promote);
+                    break;
+            }
+        }
 
         Board.PlayMove(boardMove);
     }
