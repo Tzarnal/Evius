@@ -34,6 +34,7 @@ internal class EviusUCIShell
 
     private void Dispatch(string command, string line)
     {
+        Log.Information(line);
         switch (command.ToLower())
         {
             case "uci":
@@ -78,12 +79,14 @@ internal class EviusUCIShell
     {
         var response = _manager.Go();
         Console.WriteLine($"bestmove {response}");
+        Log.Verbose(">>> {out}", $"bestmove {response}");
     }
 
     private void CommandStop()
     {
         var response = _manager.Stop();
         Console.WriteLine($"bestmove {response}");
+        Log.Verbose(">>> {out}", $"bestmove {response}");
     }
 
     private void CommandPosition(string input)
@@ -96,11 +99,13 @@ internal class EviusUCIShell
         Console.WriteLine("id name Evius");
         Console.WriteLine("id author Stefan van Oudenaarden");
         Console.WriteLine("uciok");
+        Log.Verbose(">>> {out}", $"uciok");
     }
 
     private void CommandIsReady()
     {
         Console.WriteLine("readyok");
+        Log.Verbose(">>> {out}", "readyok");
     }
 
     private void CommandQuit()

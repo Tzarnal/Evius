@@ -1,7 +1,4 @@
-﻿using EviusChess.GamePieces;
-using System.Collections.Generic;
-
-namespace EviusChess.Moves;
+﻿namespace EviusChess.Moves;
 
 public partial class MoveGenerator
 {

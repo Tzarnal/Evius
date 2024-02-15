@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using EviusChess.Moves;
+using SixLabors.ImageSharp.Drawing.Processing;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 namespace EviusUCI;
@@ -63,12 +65,30 @@ public class GameManager
     {
         var moveRegex = "\\w\\d\\w\\d\\w?";
 
+        var fullLine = string.Join(" ", moveSet);
+
+        const string FenMatchRegex = "(((?:[rnbqkpRNBQKP1-8]+\\/){7})[rnbqkpRNBQKP1-8]+)\\s([b|w])\\s(-|[K|Q|k|q]{1,4})\\s(-|[a-h][1-8])\\s(\\d+\\s\\d+)";
+        var FenMatch = Regex.Match(fullLine, FenMatchRegex);
+        var fenString = "";
+
+        if (FenMatch.Success)
+        {
+            fenString = FenMatch.Groups[0].Value;
+            fullLine = Regex.Replace(fullLine, FenMatchRegex, "");
+
+            moveSet = fullLine.Trim().Split(" ");
+        }
+
         foreach (var move in moveSet)
         {
             switch (move)
             {
                 case var r when new Regex(moveRegex).IsMatch(r):
                     MakeUCIMove(move);
+                    break;
+
+                case "fen":
+                    Board = BoardFactory.FromFen(fenString);
                     break;
 
                 case "startpos":
@@ -80,7 +100,8 @@ public class GameManager
                     break;
 
                 default:
-                    Log.Warning("Evius got a UCI move it did not understand:", move);
+                    Log.Warning("Evius got a UCI move it did not understand: {move}", move);
+                    Log.Verbose("Whole moveset {moveSet}", moveSet);
                     break;
             }
         }
@@ -88,7 +109,7 @@ public class GameManager
 
     private void MakeUCIMove(string move)
     {
-        var fromString = move.Substring(0, 2);
+        var fromString = move[..2];
         var toString = move.Substring(2, 2);
 
         var promote = "";
